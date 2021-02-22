@@ -3,22 +3,26 @@ package com.starwars.challenge.features.search.presentation.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.starwars.challenge.databinding.ActivityMainBinding
+import com.starwars.challenge.features.search.presentation.viewmodel.SearchViewModel
+import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: ViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         initTextWatcher()
+
+        observeSuggestionList()
+
     }
 
     private fun initTextWatcher() {
@@ -30,11 +34,31 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Toast.makeText(applicationContext, newText, Toast.LENGTH_SHORT).show()
+                newText?.let {
+                    viewModel.fetchSearchQuerySuggestions(newText)
+                }
                 return true
             }
 
         })
+    }
+
+    private fun observeSuggestionList() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.suggestionList.collect {
+                when(it) {
+                    is SearchViewModel.SuggestionStates.Success -> {
+                        Toast.makeText(this@MainActivity, it.value[0].toString(), Toast.LENGTH_SHORT).show()
+                    }
+                    is SearchViewModel.SuggestionStates.Error -> {
+
+                    }
+                    is SearchViewModel.SuggestionStates.Loading -> {
+
+                    }
+                }
+            }
+        }
     }
 
 
