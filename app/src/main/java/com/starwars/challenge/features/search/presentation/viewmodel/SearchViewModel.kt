@@ -2,7 +2,7 @@ package com.starwars.challenge.features.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.starwars.challenge.features.search.domain.ISearchUseCase
+import com.starwars.challenge.features.search.domain.usecase.ISearchUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*

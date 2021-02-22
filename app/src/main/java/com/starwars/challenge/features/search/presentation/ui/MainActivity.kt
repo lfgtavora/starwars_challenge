@@ -46,26 +46,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeSuggestionList() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.suggestionList.collect {
-                when(it) {
-                    is SearchViewModel.SuggestionStates.Success -> {
-                        Toast.makeText(this@MainActivity, it.value[0].toString(), Toast.LENGTH_SHORT).show()
-                    }
-                    is SearchViewModel.SuggestionStates.Error -> {
-
-                    }
-                    is SearchViewModel.SuggestionStates.Loading -> {
-
-                    }
-                }
-            }
-        }
+//        lifecycleScope.launchWhenCreated {
+//            viewModel.suggestionList.collect {
+//                when(it) {
+//                    is SearchViewModel.SuggestionStates.Success -> {
+//                        Toast.makeText(this@MainActivity, it.value[0].toString(), Toast.LENGTH_SHORT).show()
+//                    }
+//                    is SearchViewModel.SuggestionStates.Error -> {
+//
+//                    }
+//                    is SearchViewModel.SuggestionStates.Loading -> {
+//
+//                    }
+//                }
+//            }
+//        }
 
         viewModel.suggestionList2.asLiveData().observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
     }
-
-
 }

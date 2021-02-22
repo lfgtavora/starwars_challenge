@@ -1,3 +1,4 @@
+include ':core'
 include ':app:search'
 include ':app'
 rootProject.name = "Swapi Challenge"
