@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.starwars.challenge.databinding.ActivityMainBinding
+import com.starwars.challenge.features.search.data.entity.SuggestionSearchResponse
 import com.starwars.challenge.features.search.presentation.viewmodel.SearchViewModel
 import kotlinx.coroutines.flow.collect
 
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.suggestionList.collect {
                 when(it) {
                     is SearchViewModel.SuggestionStates.Success -> {
-                        Toast.makeText(this@MainActivity, it.value[0].toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, getName(it.value) , Toast.LENGTH_SHORT).show()
                     }
                     is SearchViewModel.SuggestionStates.Error -> {
 
@@ -60,6 +61,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun getName(response: SuggestionSearchResponse): String {
+        if (response.results.isNullOrEmpty()) return "Num achei esse cara nao"
+
+        return response.results[0].name
     }
 
 

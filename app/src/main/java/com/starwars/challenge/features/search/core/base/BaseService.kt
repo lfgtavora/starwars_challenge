@@ -1,13 +1,14 @@
 package com.starwars.challenge.features.search.core.base
 
+import com.starwars.challenge.features.search.data.remote.ApiClient
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class BaseService {
+open class BaseService {
     companion object {
-        private const val BASE_API = "https://s3.glbimg.com/"
+        private const val BASE_API = "https://swapi.dev/api/"
     }
 
     private val okHttpClient = OkHttpClient.Builder()
@@ -20,5 +21,9 @@ class BaseService {
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()
+
+    val swapiApi: ApiClient = getRetrofitInstance.create(
+        ApiClient::class.java
+    )
 
 }
