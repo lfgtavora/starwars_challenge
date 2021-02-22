@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
+                    viewModel.searchJob?.cancel()
                     viewModel.fetchSearchQuerySuggestions(newText)
                 }
                 return true

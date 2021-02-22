@@ -2,6 +2,7 @@ package com.starwars.challenge.features.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ class SearchViewModel : ViewModel() {
     }
 
     private var searchQuery = ""
+    var searchJob: Job? = null
     private val _suggestionList = MutableStateFlow<SuggestionStates>(SuggestionStates.Empty)
     val suggestionList: StateFlow<SuggestionStates>
         get() = _suggestionList
@@ -29,7 +31,7 @@ class SearchViewModel : ViewModel() {
 
     fun fetchSearchQuerySuggestions(query: String) {
         _suggestionList.value = SuggestionStates.Loading
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
 
             if (query == searchQuery || query.length < DEBOUNCE_MIN_CHAR)
                 return@launch
@@ -40,6 +42,8 @@ class SearchViewModel : ViewModel() {
 
             _suggestionList.value = SuggestionStates.Success(listOf(searchQuery))
         }
+
+        searchJob?.start()
     }
 
 }
