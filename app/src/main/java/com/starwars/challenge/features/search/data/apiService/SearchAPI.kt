@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SearchAPI {
-    @GET("people")
+    @GET("people/")
     suspend fun searchCharacter(
         @Query("search") query: String
     ): CharacterSearchResponse

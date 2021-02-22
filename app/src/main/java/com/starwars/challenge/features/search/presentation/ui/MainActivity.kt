@@ -1,14 +1,13 @@
 package com.starwars.challenge.features.search.presentation.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.starwars.challenge.databinding.ActivityMainBinding
 import com.starwars.challenge.features.search.presentation.viewmodel.SearchViewModel
-import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         initTextWatcher()
 
         observeSuggestionList()
-
     }
 
     private fun initTextWatcher() {
@@ -36,33 +34,26 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    viewModel.fetchSearchQuerySuggestions2(newText)
+                    viewModel.fetchSearchQuerySuggestions(newText)
                 }
                 return true
             }
-
         })
     }
 
     private fun observeSuggestionList() {
-//        lifecycleScope.launchWhenCreated {
-//            viewModel.suggestionList.collect {
-//                when(it) {
-//                    is SearchViewModel.SuggestionStates.Success -> {
-//                        Toast.makeText(this@MainActivity, it.value[0].toString(), Toast.LENGTH_SHORT).show()
-//                    }
-//                    is SearchViewModel.SuggestionStates.Error -> {
-//
-//                    }
-//                    is SearchViewModel.SuggestionStates.Loading -> {
-//
-//                    }
-//                }
-//            }
-//        }
-
         viewModel.suggestionList2.asLiveData().observe(this, Observer {
-            Toast.makeText(this, it.size.toString(), Toast.LENGTH_SHORT).show()
+            when (it) {
+                SearchViewModel.SuggestionStates.Loading -> {
+                    Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                }
+                is SearchViewModel.SuggestionStates.Success -> {
+                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                }
+                is SearchViewModel.SuggestionStates.Error -> {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
         })
     }
 }
