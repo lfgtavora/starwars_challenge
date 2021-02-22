@@ -2,6 +2,7 @@ package com.starwars.challenge.features.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.starwars.challenge.features.search.domain.model.Character
 import com.starwars.challenge.features.search.domain.usecase.ISearchUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,8 +24,8 @@ class SearchViewModel(
     val suggestionList: StateFlow<SuggestionStates>
         get() = _suggestionList
 
-    private val _suggestionList2 = MutableStateFlow<String>("")
-    val suggestionList2: StateFlow<String> = _suggestionList2
+    private val _suggestionList2 = MutableStateFlow<List<Character>>(emptyList())
+    val suggestionList2: StateFlow<List<Character>> = _suggestionList2
 
 
     sealed class SuggestionStates {

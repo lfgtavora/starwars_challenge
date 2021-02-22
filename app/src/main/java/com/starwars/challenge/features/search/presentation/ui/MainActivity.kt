@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.starwars.challenge.databinding.ActivityMainBinding
 import com.starwars.challenge.features.search.presentation.viewmodel.SearchViewModel
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         viewModel.suggestionList2.asLiveData().observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, it.size.toString(), Toast.LENGTH_SHORT).show()
         })
     }
 }

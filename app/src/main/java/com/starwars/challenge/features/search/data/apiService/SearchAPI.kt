@@ -4,7 +4,7 @@ import com.starwars.challenge.features.search.data.model.response.CharacterSearc
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface SearchServiceAPI {
+interface SearchAPI {
     @GET("people")
     suspend fun searchCharacter(
         @Query("search") query: String
