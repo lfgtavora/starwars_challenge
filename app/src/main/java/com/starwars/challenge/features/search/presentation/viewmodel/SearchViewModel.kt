@@ -2,13 +2,15 @@ package com.starwars.challenge.features.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.starwars.challenge.features.search.domain.ISearchUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchUseCase: ISearchUseCase
+) : ViewModel() {
 
     companion object {
         private const val DEBOUNCE_DELAY = 1500L
@@ -20,6 +22,9 @@ class SearchViewModel : ViewModel() {
     private val _suggestionList = MutableStateFlow<SuggestionStates>(SuggestionStates.Empty)
     val suggestionList: StateFlow<SuggestionStates>
         get() = _suggestionList
+
+    private val _suggestionList2 = MutableStateFlow<String>("")
+    val suggestionList2: StateFlow<String> = _suggestionList2
 
 
     sealed class SuggestionStates {
@@ -46,4 +51,21 @@ class SearchViewModel : ViewModel() {
         searchJob?.start()
     }
 
+    fun fetchSearchQuerySuggestions2(query: String) {
+        if (query == searchQuery || query.length < DEBOUNCE_MIN_CHAR)
+            return
+
+        searchQuery = query
+
+        viewModelScope.launch {
+            delay(DEBOUNCE_DELAY)
+
+            if (query != searchQuery) return@launch
+
+            searchUseCase.execute(query)
+                .collect { res ->
+                    _suggestionList2.value = res
+                }
+        }
+    }
 }

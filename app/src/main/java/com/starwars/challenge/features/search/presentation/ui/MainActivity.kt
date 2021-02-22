@@ -3,6 +3,8 @@ package com.starwars.challenge.features.search.presentation.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.starwars.challenge.databinding.ActivityMainBinding
@@ -35,8 +37,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    viewModel.searchJob?.cancel()
-                    viewModel.fetchSearchQuerySuggestions(newText)
+                    viewModel.fetchSearchQuerySuggestions2(newText)
                 }
                 return true
             }
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.suggestionList2.asLiveData().observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
     }
 
 
