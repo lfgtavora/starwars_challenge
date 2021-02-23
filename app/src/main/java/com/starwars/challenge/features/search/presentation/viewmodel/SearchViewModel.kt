@@ -2,9 +2,8 @@ package com.starwars.challenge.features.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.starwars.challenge.features.search.domain.model.Character
+import com.starwars.challenge.features.search.domain.model.CharacterModel
 import com.starwars.challenge.features.search.domain.usecase.ISearchUseCase
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -27,7 +26,7 @@ class SearchViewModel(
     sealed class SuggestionStates {
         object Loading : SuggestionStates()
         object Empty : SuggestionStates()
-        data class Success(val value: List<Character>) : SuggestionStates()
+        data class Success(val value: List<CharacterModel>) : SuggestionStates()
         data class Error(val message: String) : SuggestionStates()
     }
 
