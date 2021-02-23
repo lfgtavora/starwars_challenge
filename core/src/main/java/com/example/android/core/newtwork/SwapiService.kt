@@ -16,7 +16,9 @@ object SwapiService {
 
     // Using OkHttp3 to log request and response
     private val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
-    private val client = OkHttpClient.Builder().addInterceptor(logging).build()
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(HttpsInterceptor)
+        .addInterceptor(logging).build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://swapi.dev/api/")

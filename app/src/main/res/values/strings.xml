@@ -1,3 +1,16 @@
 <resources>
+    <!--Profile-->
     <string name="app_name">Swapi Challenge</string>
+    <string name="profile_name">name: %s</string>
+    <string name="birth_profile">birth: %s</string>
+    <string name="height_profile">height: %s</string>
+
+    <!--Planet-->
+    <string name="planet_name">name: %s</string>
+    <string name="planet_population">population: %s</string>
+
+    <!--Species-->
+    <string name="species_name">name: %s</string>
+    <string name="species_language">language: %s</string>
+    <string name="species_homeworld">planet of origin: %s</string>
 </resources>

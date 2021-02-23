@@ -11,7 +11,5 @@ fun CharacterSearchResponse.mapToModel(): List<CharacterModel> =
 private fun CharacterRemoteModel.mapResponseToModel() =
     CharacterModel(
         name = this.name,
-        birthYear = this.birth_year,
-        height = this.height,
         url = this.url
     )

@@ -8,10 +8,12 @@ import com.starwars.challenge.databinding.ViewHolderSuggestionBinding
 import com.starwars.challenge.features.search.domain.model.CharacterModel
 import com.starwars.challenge.features.search.presentation.ui.viewholder.SuggestionViewHolder
 
-class SuggestionAdapter : ListAdapter<CharacterModel, SuggestionViewHolder>(diffUtilCallback) {
+class SuggestionAdapter(private val suggestionClickHandler: SuggestionViewHolder.ClickHandler) :
+    ListAdapter<CharacterModel, SuggestionViewHolder>(diffUtilCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionViewHolder =
         SuggestionViewHolder(
-            ViewHolderSuggestionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewHolderSuggestionBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            suggestionClickHandler
         )
 
     override fun onBindViewHolder(holder: SuggestionViewHolder, position: Int) =
@@ -19,19 +21,19 @@ class SuggestionAdapter : ListAdapter<CharacterModel, SuggestionViewHolder>(diff
 
     companion object {
         val diffUtilCallback = object : DiffUtil.ItemCallback<CharacterModel>() {
-                override fun areItemsTheSame(
-                    oldItem: CharacterModel,
-                    newItem: CharacterModel
-                ): Boolean {
-                    return oldItem.url == newItem.url
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: CharacterModel,
-                    newItem: CharacterModel
-                ): Boolean {
-                    return oldItem == newItem
-                }
+            override fun areItemsTheSame(
+                oldItem: CharacterModel,
+                newItem: CharacterModel
+            ): Boolean {
+                return oldItem.url == newItem.url
             }
+
+            override fun areContentsTheSame(
+                oldItem: CharacterModel,
+                newItem: CharacterModel
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

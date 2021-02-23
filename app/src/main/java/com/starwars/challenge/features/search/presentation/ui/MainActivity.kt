@@ -1,23 +1,29 @@
 package com.starwars.challenge.features.search.presentation.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import com.starwars.challenge.databinding.ActivityMainBinding
+import com.starwars.challenge.features.details.DetailsActivity
 import com.starwars.challenge.features.search.domain.model.CharacterModel
 import com.starwars.challenge.features.search.presentation.ui.adapter.SuggestionAdapter
+import com.starwars.challenge.features.search.presentation.ui.viewholder.SuggestionViewHolder
 import com.starwars.challenge.features.search.presentation.viewmodel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SuggestionViewHolder.ClickHandler {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: SearchViewModel by viewModel()
 
-    private val suggestionAdapter = SuggestionAdapter()
+    private val suggestionAdapter = SuggestionAdapter(this)
+
+    private var searchedCharacter: CharacterModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +32,16 @@ class MainActivity : AppCompatActivity() {
 
         initTextWatcher()
         setupView()
-        observeSuggestionList()
+        setupObservers()
     }
 
     private fun setupView() {
         binding.suggestionList.adapter = suggestionAdapter
+    }
+
+    private fun setupObservers() {
+        observeSuggestionList()
+        observeCharacterDetails()
     }
 
     private fun initTextWatcher() {
@@ -67,6 +78,24 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun observeCharacterDetails() {
+        viewModel.characterDetails.asLiveData().observe(this, Observer {
+            when (it) {
+                SearchViewModel.DetailsStates.Loading -> {
+                    Toast.makeText(this, "Loading Details", Toast.LENGTH_SHORT).show()
+                }
+                is SearchViewModel.DetailsStates.Success -> {
+                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+//                    startActivity(DetailsActivity.getIntent(this, it.value, searchedCharacter!!))
+                    startActivity(DetailsActivity.getIntent(this, it.value))
+                }
+                is SearchViewModel.DetailsStates.Error -> {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
     private fun showSuggestionList(suggestionList: List<CharacterModel>) {
         suggestionAdapter.submitList(suggestionList)
         binding.suggestionList.isVisible = true
@@ -74,5 +103,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideSuggestionList() {
         binding.suggestionList.isVisible = false
+    }
+
+    override fun onClick(suggestionItem: CharacterModel) {
+//        searchedCharacter = suggestionItem
+        viewModel.fetchDetails(suggestionItem.url)
     }
 }
