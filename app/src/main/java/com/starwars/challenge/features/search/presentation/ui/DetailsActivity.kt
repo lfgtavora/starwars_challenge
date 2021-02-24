@@ -10,13 +10,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import com.starwars.challenge.R
-import com.starwars.challenge.databinding.ActivityDetailsBinding
-import com.starwars.challenge.databinding.LayoutPlanetDetailsBinding
-import com.starwars.challenge.databinding.LayoutProfileDetailsBinding
-import com.starwars.challenge.databinding.LayoutSpecieDetailsBinding
+import com.starwars.challenge.databinding.*
 import com.starwars.challenge.features.search.domain.model.CharacterDetailModel
 import com.starwars.challenge.features.search.domain.model.PlanetModel
 import com.starwars.challenge.features.search.domain.model.SpecieModel
+import com.starwars.challenge.features.search.presentation.ui.adapter.FilmAdapter
 import com.starwars.challenge.features.search.presentation.viewmodel.DetailsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,8 +24,10 @@ class DetailsActivity : AppCompatActivity() {
     private lateinit var profileBinding: LayoutProfileDetailsBinding
     private lateinit var planetBinding: LayoutPlanetDetailsBinding
     private lateinit var speciesBinding: LayoutSpecieDetailsBinding
+    private lateinit var filmsBinding: LayoutFilmsListBinding
 
     private val detailsViewModel: DetailsViewModel by viewModel()
+    private val filmAdapter = FilmAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,7 @@ class DetailsActivity : AppCompatActivity() {
             profileBinding = LayoutProfileDetailsBinding.bind(root)
             planetBinding = LayoutPlanetDetailsBinding.bind(root)
             speciesBinding = LayoutSpecieDetailsBinding.bind(root)
+            filmsBinding = LayoutFilmsListBinding.bind(root)
             setContentView(root)
         }
         initView()
@@ -54,8 +55,11 @@ class DetailsActivity : AppCompatActivity() {
         profileBinding.detailsProfileHeight.text =
             getString(R.string.height_profile, details.height)
 
+        filmsBinding.detailsFilmsList.adapter = filmAdapter
+
         detailsViewModel.getPlanet(details.planetUrl)
         detailsViewModel.getSpecies(details.speciesUrls)
+        detailsViewModel.getFilms(details.filmUrls)
     }
 
     private fun initObservers() {
@@ -89,13 +93,32 @@ class DetailsActivity : AppCompatActivity() {
                 }
             }
         })
+
+        detailsViewModel.films.asLiveData().observe(this, Observer {
+            when (it) {
+                DetailsViewModel.FilmState.Loading -> {
+                    Toast.makeText(this, "Loading Planet", Toast.LENGTH_SHORT).show()
+                }
+                DetailsViewModel.FilmState.Empty -> {
+//                    setupEmptySpecieView()
+                }
+                is DetailsViewModel.FilmState.Success -> {
+                    filmAdapter.submitList(it.value)
+                }
+                is DetailsViewModel.FilmState.Error -> {
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+
     }
 
     private fun setupSpecieView(value: SpecieModel) =
         speciesBinding.run {
-            detailsSpeciesName.text = value.name
-            detailsSpeciesHomeworld.text = value.homeWorld
-            detailsSpeciesLanguage.text = value.language
+            detailsSpeciesName.text = getString(R.string.species_name, value.name)
+            detailsSpeciesHomeworld.text = getString(R.string.species_homeworld, value.homeWorld)
+            detailsSpeciesLanguage.text = getString(R.string.species_language, value.language)
         }
 
     private fun setupEmptySpecieView() =

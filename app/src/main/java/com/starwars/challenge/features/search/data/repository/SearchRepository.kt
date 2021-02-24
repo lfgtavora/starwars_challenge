@@ -2,10 +2,7 @@ package com.starwars.challenge.features.search.data.repository
 
 import com.starwars.challenge.features.search.data.apiService.SearchAPI
 import com.starwars.challenge.features.search.data.mappers.mapToModel
-import com.starwars.challenge.features.search.domain.model.CharacterDetailModel
-import com.starwars.challenge.features.search.domain.model.CharacterModel
-import com.starwars.challenge.features.search.domain.model.PlanetModel
-import com.starwars.challenge.features.search.domain.model.SpecieModel
+import com.starwars.challenge.features.search.domain.model.*
 import com.starwars.challenge.features.search.domain.repository.ISearchRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -27,5 +24,9 @@ class SearchRepository(val apiService: SearchAPI): ISearchRepository {
 
     override fun getSpecie(url: String): Flow<SpecieModel> = flow {
         emit(apiService.getSpecie(url).mapToModel())
+    }.flowOn(Dispatchers.IO)
+
+    override fun getFilms(url: String): Flow<FilmModel> = flow {
+        emit(apiService.getFilm(url).mapToModel())
     }.flowOn(Dispatchers.IO)
 }

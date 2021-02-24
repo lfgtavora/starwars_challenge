@@ -6,5 +6,5 @@ import com.starwars.challenge.features.search.domain.model.SpecieModel
 fun SpecieResponse.mapToModel() = SpecieModel(
     name = name,
     language = language,
-    homeWorld = homeworld.orEmpty()
+    homeWorld = homeworld ?: "N/A"
 )

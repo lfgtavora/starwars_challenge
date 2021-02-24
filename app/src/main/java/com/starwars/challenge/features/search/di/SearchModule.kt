@@ -20,7 +20,8 @@ val searchModule = module {
     factory<IDetailsUseCase> { DetailsUseCase(get()) }
     factory<IPlanetUseCase> { PlanetUseCase(get()) }
     factory<ISpecieUseCase> {SpecieUseCase(get())}
+    factory<IFilmUseCase> {FilmUseCase(get())}
 
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { DetailsViewModel(get(), get()) }
+    viewModel { DetailsViewModel(get(), get(), get()) }
 }

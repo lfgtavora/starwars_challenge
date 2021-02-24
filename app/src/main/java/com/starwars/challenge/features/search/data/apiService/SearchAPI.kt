@@ -1,9 +1,6 @@
 package com.starwars.challenge.features.search.data.apiService
 
-import com.starwars.challenge.features.search.data.model.response.CharacterDetailResponse
-import com.starwars.challenge.features.search.data.model.response.CharacterSearchResponse
-import com.starwars.challenge.features.search.data.model.response.PlanetResponse
-import com.starwars.challenge.features.search.data.model.response.SpecieResponse
+import com.starwars.challenge.features.search.data.model.response.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Url
@@ -20,4 +17,7 @@ interface SearchAPI {
 
     @GET
     suspend fun getSpecie(@Url url: String): SpecieResponse
+
+    @GET
+    suspend fun getFilm(@Url url: String): FilmResponse
 }
