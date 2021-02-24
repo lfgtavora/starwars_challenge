@@ -1,15 +1,12 @@
 package com.starwars.challenge.features.search.presentation.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import com.starwars.challenge.databinding.ActivityMainBinding
-import com.starwars.challenge.features.details.DetailsActivity
 import com.starwars.challenge.features.search.domain.model.CharacterModel
 import com.starwars.challenge.features.search.presentation.ui.adapter.SuggestionAdapter
 import com.starwars.challenge.features.search.presentation.ui.viewholder.SuggestionViewHolder
@@ -22,8 +19,6 @@ class MainActivity : AppCompatActivity(), SuggestionViewHolder.ClickHandler {
     private val viewModel: SearchViewModel by viewModel()
 
     private val suggestionAdapter = SuggestionAdapter(this)
-
-    private var searchedCharacter: CharacterModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

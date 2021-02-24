@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.starwars.challenge.features.search.domain.model.CharacterDetailModel
 import com.starwars.challenge.features.search.domain.model.CharacterModel
-import com.starwars.challenge.features.search.domain.usecase.DetailsUseCase
 import com.starwars.challenge.features.search.domain.usecase.IDetailsUseCase
 import com.starwars.challenge.features.search.domain.usecase.ISearchUseCase
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SearchViewModel(

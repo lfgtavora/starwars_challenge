@@ -13,4 +13,5 @@
     <string name="species_name">name: %s</string>
     <string name="species_language">language: %s</string>
     <string name="species_homeworld">planet of origin: %s</string>
+    <string name="species_empty">Unavailable Data</string>
 </resources>
